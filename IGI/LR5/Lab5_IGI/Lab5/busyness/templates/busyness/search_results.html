@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Search Results {% endblock %}
+
+{% block content %}
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Search Results</h2>
+        
+        <form method="GET" action="{% url 'busyness:search_products' %}" class="mb-4">
+            <input type="text" name="query" value="{{ query }}" placeholder="Search for products...">
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="grid grid-cols-3 gap-3">
+            {% for product in results %}
+                <div>      
+                    <img src="{{ product.image.url }}" width="400" height="140">
+                    <div class="p-6 bg-white rounded-b-xl">
+                        <h2 class="text-2xl">{{ product.name }}</h2>
+                        <p class="text-gray-500">Price: {{ product.price }}</p>
+                        <p class="text-gray-500">Quantity in stock: {{ product.stock }}</p>
+                        {% if user.is_authenticated and user.is_superuser %}
+                            <a href="{% url 'busyness:edit_product' product.id %}">Edit</a> | 
+                            <a href="{% url 'busyness:delete_product' product.id %}">Delete</a>
+                        {% endif %}
+                        {%if user.is_authenticated and user.is_customer%}
+                            <form method="POST" action="{% url 'busyness:add_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" min="1" value="1" class="w-16 text-center">
+                                <input type="submit" value="Add to Cart">
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <a href="/" class="text-xl font-semibold">Home</a>
+{% endblock %}

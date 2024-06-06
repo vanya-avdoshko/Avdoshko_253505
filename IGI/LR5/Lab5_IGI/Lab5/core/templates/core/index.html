@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+    <!-- Информация о пользователе -->
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">User Information</h2>
+        <p>Username: {{ user.username }}</p>
+        <p>Timezone: {{ user_timezone }}</p>
+        <p>Current Date: {{ current_date_formatted }}</p>
+        <pre>{{ calendar_text }}</pre>
+    </div>
+    
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Catalog</h2>
+
+        <!-- Форма для поиска -->
+        <form method="GET" action="{% url 'busyness:search_products' %}" class="mb-4">
+            <input type="text" name="query" placeholder="Search for products...">
+            <button type="submit">Search</button>
+        </form>
+        
+        <!-- Форма для сортировки -->
+        <form method="GET" action="{% url 'core:index' %}" class="mb-4">
+            <label for="sort_by">Sort by:</label>
+            <select name="sort_by" id="sort_by" onchange="this.form.submit()">
+                <option value="">Select</option>
+                <option value="name" {% if request.GET.sort_by == 'name' %}selected{% endif %}>Name</option>
+                <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>Price</option>
+                <option value="category_id" {% if request.GET.sort_by == 'category_id' %}selected{% endif %}>Category</option>
+            </select>
+        </form>
+        
+        <div class="grid grid-cols-3 gap-3">
+            {% for product in products %}
+                <div>      
+                    <img src="{{ product.image.url }}" width="400" height="140">
+                    <div class="p-6 bg-white rounded-b-xl">
+                        <h2 class="text-2xl">{{ product.name }}</h2>
+                        <p class="text-gray-500">Price: {{ product.price }}</p>
+                        <p class="text-gray-500">Category: {{ product.category_id }}</p>
+                        <p class="text-gray-500">Quantity in stock: {{ product.stock }}</p>
+
+
+                                                <!-- Список отзывов -->
+                        <h3 class="text-xl mt-6">Reviews:</h3>
+                        {% for review in product.reviews.all %}
+                            <div class="border-t border-gray-300 py-2">
+                                <p><strong>{{ review.user.username }}</strong> (Rating: {{ review.rating }}/5)</p>
+                                <p>{{ review.comment }}</p>
+                                <p><em>{{ review.created_at|date:"d M Y H:i" }}</em></p> <!-- Добавление даты отзыва -->
+                            </div>
+                        {% empty %}
+                            <p>No reviews yet.</p>
+                        {% endfor %}
+
+                        <!-- Форма для добавления отзыва -->
+                        <h3 class="text-xl mt-6">Add your review:</h3>
+                        {% if user.is_authenticated and user.is_customer %}
+                            <form method="POST" action="{% url 'busyness:add_review' product.id %}">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit">Submit Review</button>
+                            </form>
+                        {% else %}
+                            <p>You need to <a href="{% url 'core:login' %}">login</a> to add a review.</p>
+                        {% endif %}
+
+                        {% if user.is_authenticated and user.is_superuser %}
+                            <a href="{% url 'busyness:edit_product' product.id %}">Edit</a> | 
+                            <a href="{% url 'busyness:delete_product' product.id %}">Delete</a>
+                        {% endif %}
+                        {% if user.is_authenticated and user.is_customer %}
+                        <form method="POST" action="{% url 'busyness:add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="0" min="0">
+                            <input type="submit" value="Add to Cart">
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">News</h2>
+        <div class="grid grid-cols-3 gap-3">
+            {% for new in news %}
+            <div>      
+                <img src="{{ new.image.url }}" width="400" height="140">
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h2 class="text-2xl">{{ new.text }}</h2>
+                    <p class="text-gray-500"> {{ new.created_at|date:"d M Y H:i" }}</p>  <!-- Дата добавления новости -->
+                    {% if user.is_authenticated and user.is_superuser %}
+                    <a href="{% url 'busyness:edit_news' new.id %}">Edit</a> |
+                    <a href="{% url 'busyness:delete_news' new.id %}">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

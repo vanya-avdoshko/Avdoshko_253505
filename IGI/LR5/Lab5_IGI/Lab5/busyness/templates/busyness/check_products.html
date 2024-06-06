@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Products of {{ supplier.name }}{% endblock %}
+
+{% block content %}
+  <h1 class="mb-6 text-3xl">Products of {{ supplier.name }}</h1>
+  {% if products %}
+    <table class="w-full border-collapse border border-gray-500">
+      <thead>
+        <tr>
+          <th class="border border-gray-600 p-2">Name</th>
+          <th class="border border-gray-600 p-2">Price</th>
+          <th class="border border-gray-600 p-2">Stock</th>
+          <th class="border border-gray-600 p-2">Category</th>
+          <th class="border border-gray-600 p-2">Article</th>
+          <th class="border border-gray-600 p-2">Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td class="border border-gray-600 p-2">{{ product.name }}</td>
+            <td class="border border-gray-600 p-2">{{ product.price }}</td>
+            <td class="border border-gray-600 p-2">{{ product.stock }}</td>
+            <td class="border border-gray-600 p-2">{{ product.category_id.name }}</td>
+            <td class="border border-gray-600 p-2">{{ product.article_id.name }}</td>
+            <td class="border border-gray-600 p-2">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No products available for this supplier.</p>
+  {% endif %}
+  <div class="mt-6">
+    <a href="{% url 'busyness:supplier_list' %}" class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Back to Supplier List</a>
+  </div>
+  <a href="/" class="text-xl font-semibold">Home</a>
+{% endblock %}

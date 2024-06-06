@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <h1>FAQ List</h1>
+  <ul>
+    {% for faq in faqs %}
+      <li>
+        <strong>Question:</strong> {{ faq.question }}<br>
+        <strong>Answer:</strong> {{ faq.answer }}<br>
+        <strong>Added on:</strong> {{ faq.created_at|date:"d M Y H:i" }}
+        <p>===============================</p>
+      </li>
+    {% endfor %}
+  </ul>
+  {% if user.is_authenticated %}
+    <a href="{% url 'busyness:create_question' %}">Ask a Question</a>
+  {% endif %}
+  <a href="/" class="text-xl font-semibold">Home</a>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <h1 class="mb-6 text-3xl">Supplier List</h1>
+  {% if suppliers %}
+    <table class="w-full border-collapse border border-gray-500">
+        <thead>
+            <tr>
+              <th class="border border-gray-600 p-2">Name</th>
+              <th class="border border-gray-600 p-2">Address</th>
+              <th class="border border-gray-600 p-2">Phone</th>
+              {% if user.is_superuser %}
+                <th class="border border-gray-600 p-2">Actions</th>
+              {% endif %}
+            </tr>
+          </thead>
+      <tbody>
+        {% for supplier in suppliers %}
+          {% if user.is_superuser %}
+          
+            <tr>
+              <td class="border border-gray-600 p-2">{{ supplier.name }}</td>
+              <td class="border border-gray-600 p-2">{{ supplier.address }}</td>
+              <td class="border border-gray-600 p-2">{{ supplier.phone }}</td>
+              {% if user.is_superuser %}
+                <td class="border border-gray-600 p-2">
+                  <a href="{% url 'busyness:edit_supplier' supplier.id %}" class="text-blue-600 hover:text-blue-800">Edit</a>
+                  |
+                  <a href="{% url 'busyness:delete_supplier' supplier.id %}" class="text-red-600 hover:text-red-800">Delete</a>
+                  |
+                  <a href="{% url 'busyness:check_products' supplier.id %}" class="text-red-600 hover:text-red-800">Products</a>
+                  
+                </td>
+              {% endif %}
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No suppliers available.</p>
+  {% endif %}
+  {% if user.is_superuser %}
+    <div class="mt-6">
+      <a href="{% url 'busyness:add_supplier' %}" class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Add Supplier</a>
+    </div>
+  {% endif %}
+  <a href="/" class="text-xl font-semibold">Home</a>
+  
+{% endblock %}

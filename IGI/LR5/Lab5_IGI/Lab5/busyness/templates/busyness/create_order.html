@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block content %}
+  <h1>Create Order</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ order_form.as_p }}
+
+    <h2>Order Items</h2>
+    {% for product in products %}
+      <div>
+        <label>
+          <input type="checkbox" name="product" value="{{ product.id }}">
+          {{ product.name }} - {{ product.supplier.name }} - ${{ product.price }}
+        </label>
+        <input type="number" name="quantity" value="1" min="1">
+      </div>
+    {% endfor %}
+    
+    <button type="submit">Create Order</button>
+  </form>
+  <a href="/" class="text-xl font-semibold">Home</a>
+{% endblock %}

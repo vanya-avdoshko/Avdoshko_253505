@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% block title %} Vacancies {% endblock %}
+
+{% block content %}
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Vacancies</h2>
+        <div class="grid grid-cols-1 gap-4">
+            {% for vacancy in vacancies %}
+                <div class="p-6 bg-white rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold">{{ vacancy.name }}</h3>
+                    <p class="mt-4 text-gray-700">{{ vacancy.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
