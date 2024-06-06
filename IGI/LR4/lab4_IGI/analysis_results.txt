@@ -1,0 +1,13 @@
+Number of sentences: 13
+Number of narrative sentences: 10
+Number of interrogative sentences: 2
+Number of imperative sentences: 1
+Average sentence length: 37.53846153846154
+Average word length: 4.392857142857143
+Number of smileys: 2
+All capital letters: ['T', 'I', 'N', 'T', 'H', 'L', 'T', 'C', 'N', 'T', 'L', 'S', 'P', 'S', 'N']
+Replaced text: The quick brown fox jumps over the lazy dog. Is this a question? No, it's not... This is an imperative sentence! How many words are in this sentence? Let's count and see. This text contains some smileys: :-) :--(( [[]]. Capital letters are present too. Now let's see if the sequence 'qqq' will be replaced with 'qqq'. The longest word ending with 'e' in this text is 'smile'. Lastly, we have Some words with punctuation Punctuation qqqqqqqqqqe: example, test. Some other... New sentence with...
+
+Number of words with max length: 3
+Words with punctuation: []
+Longest word ending with 'e': qqqqqqqqqqe
