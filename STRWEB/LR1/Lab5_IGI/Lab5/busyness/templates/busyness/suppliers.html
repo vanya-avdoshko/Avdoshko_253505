@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <h1 class="mb-6 text-3xl">Supplier List</h1>
+  {% if suppliers %}
+    <table class="w-full border-collapse border border-gray-500">
+      <thead>
+        <tr>
+          <th class="border border-gray-600 p-2">Name</th>
+          <th class="border border-gray-600 p-2">Address</th>
+          <th class="border border-gray-600 p-2">Phone</th>
+          {% if user.is_superuser %}
+            <th class="border border-gray-600 p-2">Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for supplier in suppliers %}
+            <tr>
+              <td class="border border-gray-600 p-2">{{ supplier.name }}</td>
+              <td class="border border-gray-600 p-2">{{ supplier.address }}</td>
+              <td class="border border-gray-600 p-2">{{ supplier.phone }}</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No suppliers available.</p>
+  {% endif %}
+  <a href="/" class="text-xl font-semibold">Home</a>
+{% endblock %}

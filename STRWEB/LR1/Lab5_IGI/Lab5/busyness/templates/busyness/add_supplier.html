@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <div class="edit-supplier-container">
+    <h1 class="page-title">Add Supplier</h1>
+    <form method="post" class="supplier-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-primary">Submit</button>
+    </form>
+  </div>
+{% endblock %}

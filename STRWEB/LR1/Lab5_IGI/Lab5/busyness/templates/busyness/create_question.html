@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Create Question{% endblock %}
+
+{% block content %}
+    <div class="question-form-container">
+        <h1>Ask a Question</h1>
+        <form method="POST" class="question-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-submit-question">Submit</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% block title %} Employees {% endblock %}
+
+{% block content %}
+    <div class="employees-container mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="employees-title mb-12 text-2xl text-center font-bold">Employees</h2>
+        <div class="employees-grid grid grid-cols-3 gap-6">
+            {% for employee in employees %}
+                <div class="employee-card p-6 bg-white rounded-xl shadow-md">
+                    <img src="{{ employee.photo.url }}" alt="Photo of {{ employee.name }}" width="400" height="300" class="employee-photo w-full h-48 object-cover rounded-t-xl">
+                    <div class="employee-details p-4">
+                        <h3 class="employee-name text-xl font-semibold">{{ employee.name }}</h3>
+                        <p class="employee-position mt-2 text-gray-700">Position: {{ employee.position }}</p>
+                        <p class="employee-phone mt-2 text-gray-700">Phone: {{ employee.phone }}</p>
+                        <hr class="divider mt-4">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

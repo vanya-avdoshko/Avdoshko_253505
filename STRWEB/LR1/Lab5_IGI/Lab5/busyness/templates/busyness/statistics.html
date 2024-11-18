@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block content %}
+<div class="statistics-container">
+    <h1>Statistics</h1>
+    
+    <h2>Customers (Alphabetical Order)</h2>
+    <ol>
+        {% for customer in customers %} 
+            <li>{{ customer.user.username }}</li>
+        {% endfor %}
+    </ol>
+
+    <h2>Products (Alphabetical Order)</h2>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Total Sales</h2>
+    <p>{{ total_sales }} BYN</p>
+
+    <h2>Sales Statistics</h2>
+    <p>Mean: {{ mean_sales }} BYN</p>
+    <p>Median: {{ median_sales }} BYN</p>
+    <p>Mode: {{ mode_sales }} BYN</p>
+
+    <h2>Customer Age Statistics</h2>
+    <p>Mean Age: {{ mean_age }}</p>
+    <p>Median Age: {{ median_age }}</p>
+
+    <h2>Most Popular Products</h2>
+    <img src="data:image/png;base64,{{ pie_chart }}" alt="Most Popular Products">
+
+    <h2>Distribution of Customers by Age</h2>
+    <img src="data:image/png;base64,{{ histogram }}" alt="Distribution of Customers by Age">
+
+</div>
+{% endblock %}

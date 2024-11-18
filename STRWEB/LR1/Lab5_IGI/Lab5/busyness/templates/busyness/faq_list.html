@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <div class="faq-container mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h1 class="employees-title mb-12 text-2xl text-center font-bold">FAQ List</h1>
+
+    <div class="faq-list">
+      {% for faq in faqs %}
+        <details class="faq-item bg-white shadow-md p-6 rounded-lg mb-6">
+          <summary class="faq-question cursor-pointer text-lg font-semibold">
+            Question: {{ faq.question }}
+          </summary>
+          
+          <div class="faq-answer mt-2 text-gray-500">
+            <p>{{ faq.answer }}</p>
+            <div class="text-gray-400 mt-2">
+              <strong>Added on:</strong> {{ faq.created_at|date:"d M Y H:i" }}
+            </div>
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+
+    {% if user.is_authenticated %}
+      <div class="ask-question-container text-center mt-6">
+        <a class="ask-question-btn bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md inline-block" href="{% url 'busyness:create_question' %}">
+          Ask a Question
+        </a>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

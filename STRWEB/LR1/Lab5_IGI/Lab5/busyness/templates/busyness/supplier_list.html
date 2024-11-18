@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <h1 class="table-title">Supplier List</h1>
+  {% if suppliers %}
+    <table class="supplier-table">
+      <thead>
+        <tr>
+          <th id="name-header">Name</th>
+          <th id="address-header">Address</th>
+          <th id="phone-header">Phone</th>
+          {% if user.is_superuser %}
+            <th id="actions-header">Actions</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for supplier in suppliers %}
+          <tr>
+            <td headers="name-header">{{ supplier.name }}</td>
+            <td headers="address-header">{{ supplier.address }}</td>
+            <td headers="phone-header">{{ supplier.phone }}</td>
+            {% if user.is_superuser %}
+            <td headers="actions-header">
+              <div class="action-buttons"> <!-- Контейнер для кнопок -->
+                <a href="{% url 'busyness:edit_supplier' supplier.id %}" class="edit-button">Edit</a>
+                <a href="{% url 'busyness:delete_supplier' supplier.id %}" class="delete-button">Delete</a>
+                <a href="{% url 'busyness:check_products' supplier.id %}" class="products-button">Products</a>
+              </div>
+            </td>
+            
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No suppliers available.</p>
+  {% endif %}
+
+  {% if user.is_superuser %}
+    <div class="add-button-container"> <!-- Контейнер для центрирования кнопки -->
+      <a href="{% url 'busyness:add_supplier' %}" class="add-button">Add Supplier</a>
+    </div>
+  {% endif %}
+{% endblock %}

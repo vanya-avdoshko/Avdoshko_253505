@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Promo Codes{% endblock %}
+
+{% block content %}
+    <h1 class="promo-codes-title">Promo Codes</h1>
+    <table class="promo-codes-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Discount</th>                
+                <th>Is Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for promo_code in promo_codes %}
+                <tr class="promo-code-row">
+                    <td>{{ promo_code.code }}</td>
+                    <td>{{ promo_code.discount }}%</td>                    
+                    <td>{{ promo_code.is_active|yesno:"Yes,No" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
