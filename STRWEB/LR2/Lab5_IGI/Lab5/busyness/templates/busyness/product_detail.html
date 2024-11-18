@@ -1,0 +1,78 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="product-info">
+        <!-- Изображение товара -->
+        <div class="product-image">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" width="280" height="280">
+        </div>
+        <!-- Детали о товаре и кнопки -->
+        <div class="product-details">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <p class="product-price">Price: {{ product.price }}</p>
+            <p class="product-category">Category: {{ product.category_id }}</p>
+            <p class="product-stock">Quantity in stock: {{ product.stock }}</p>
+
+            <!-- Форма для добавления в корзину -->
+            {% if user.is_authenticated and user.is_customer %}
+                <form method="POST" action="{% url 'busyness:add_to_cart' product.id %}">
+                    {% csrf_token %}
+                    <label for="quantity" class="quantity-label">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input">                    
+                    <button type="submit" class="btn-add-cart">Add to Cart</button>
+                </form>
+            {% endif %}
+
+            <!-- Действия для администратора -->
+            {% if user.is_authenticated and user.is_superuser %}
+                <div class="admin-actions">
+                    <a href="{% url 'busyness:edit_product' product.id %}" class="btn-edit">Edit</a>
+                    <a href="{% url 'busyness:delete_product' product.id %}" class="btn-delete">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Список отзывов -->
+    <div class="reviews-section">
+        <h2 class="reviews-title">Reviews:</h2>
+        {% for review in product.reviews.all %}
+        <div class="border-t border-gray-300 py-4">
+            <p>
+                <strong>{{ review.user.username }}</strong>
+                <span class="rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            &#9733; <!-- Звезда (заполненная) -->
+                        {% else %}
+                            &#9734; <!-- Звезда (пустая) -->
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </p>
+            <p>{{ review.comment }}</p>
+            <p><em>{{ review.created_at|date:"d M Y H:i" }}</em></p>
+        </div>
+        
+        
+        {% empty %}
+            <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Форма для добавления отзыва -->
+    <div class="add-review-section">
+        <h2 class="review-form-title">Add your review:</h2>
+        {% if user.is_authenticated and user.is_customer %}
+            <form method="POST" action="{% url 'busyness:add_review' product.id %}" class="review-form">
+                {% csrf_token %}
+                <label for="review" class="review-label">Your Review:</label>
+                {{ form.as_p }}
+                <button type="submit" class="btn-submit-review">Submit Review</button>
+            </form>        
+        {% else %}
+            <p>You need to <a href="{% url 'core:login' %}" class="login-link">login</a> to add a review.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

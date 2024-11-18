@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+<div class="auth-form">
+    <h1>Sign up</h1>
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Username</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            {{ form.password1 }}
+        </div>
+        <div class="form-group">
+            <label>Repeat password</label>
+            {{ form.password2 }}
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            {{ form.address }}
+        </div>
+        <div class="form-group">
+            <label>Phone number</label>
+            {{ form.phone }}
+        </div>
+        <div class="form-group">
+            <label>Birth date</label>
+            {{ form.date_of_birth }}
+        </div>
+        {% if form.errors or form.non_field_errors %}
+        <div class="form-errors">
+            {% for field in form %}
+                {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <button type="submit" class="auth-group">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
