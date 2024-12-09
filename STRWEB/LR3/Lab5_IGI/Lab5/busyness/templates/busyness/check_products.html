@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Products of {{ supplier.name }}{% endblock %}
+
+{% block content %}
+  <h1 class="mb-6 text-3xl">Products of {{ supplier.name }}</h1>
+  {% if products %}
+    <table class="supplier-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Category</th>
+          <th>Article</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.stock }}</td>
+            <td>{{ product.category_id.name }}</td>
+            <td>{{ product.article_id.name }}</td>
+            <td>
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No products available for this supplier.</p>
+  {% endif %}
+  
+{% endblock %}

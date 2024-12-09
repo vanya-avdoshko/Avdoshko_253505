@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Weather {% endblock %}
+
+{% block content %}
+    <h1>Ваше местоположение</h1>
+    <p id="location">Определение...</p>
+
+    <h2>Погода в вашем регионе</h2>
+    <div id="weather">Загрузка...</div>
+
+    <script src="{% static 'js/weather.js' %}"></script>
+{% endblock %}

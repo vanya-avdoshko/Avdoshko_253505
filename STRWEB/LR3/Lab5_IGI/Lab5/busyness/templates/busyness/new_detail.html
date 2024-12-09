@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %} 
+{% block content %}
+<div class="new-details-container mx-auto p-6">
+    <div class="new-details-wrapper">
+        <!-- Изображение новости -->
+        <div class="new-details-image-block">
+            <img src="{{ new.image.url }}" alt="Image for {{ new.title }}">
+        </div>
+        <!-- Текст статьи -->
+        <div class="new-details-text-block">
+            <h2 class="new-details-title">{{ new.title }}</h2>
+            <p class="new-details-text">{{ new.text }}</p>
+            <p class="new-details-date">{{ new.created_at|date:"d M Y H:i" }}</p>
+        </div> 
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,226 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Welcome {% endblock %}
+
+{% block content %}   
+
+<div id="countdown-container">
+    <div id="countdown">
+      <h1>Осталось времени</h1>
+      <div id="time">01:00:00</div>
+    </div>
+  </div> 
+
+  <script src="{% static 'js/timer.js' %}"></script>
+
+<div class="slider" id="slider"> 
+    <div class="slides" id="slides"> 
+        <div class="slide fade"> 
+            <div class="numbertext">1 / 3</div> 
+            <a href="#"> 
+                <img src="{% static 'images/poster1.png' %}" alt="Poster 1" height="200"> 
+            </a> 
+            <div class="slide_caption">Caption 1</div> 
+        </div> 
+        <div class="slide fade"> 
+            <div class="numbertext">2 / 3</div> 
+             
+            <a href="#"> 
+                <img src="{% static 'images/poster2.png' %}" alt="Poster 2" height="200"> 
+            </a> 
+            <div class="slide_caption">Caption 2</div> 
+        </div> 
+        <div class="slide fade"> 
+            <div class="numbertext">3 / 3</div> 
+            <a href="#"> 
+                <img src="{% static 'images/poster3.png' %}" alt="Poster 3" height="200"> 
+            </a> 
+            <div class="slide_caption">Caption 3</div> 
+        </div> 
+    </div> 
+ 
+    <div class="navigation" id="nav"> 
+        <div class="prev">❮</div> 
+        <div class="next">❯</div> 
+    </div> 
+ 
+    <div class="pagination" id="pagination"> 
+        <span class="page_dot" onclick="slider.goToSlide(0)"></span> 
+        <span class="page_dot" onclick="slider.goToSlide(1)"></span> 
+        <span class="page_dot" onclick="slider.goToSlide(2)"></span> 
+    </div>     
+</div>
+    {% comment %} надстройки для админской формы {% endcomment %}
+    
+      <!-- Подключение внешнего JavaScript-файла -->
+      <script src="{% static 'js/slider.js' %}"></script>
+
+      <form  id="settings-form" class="review-form"> 
+        <label for="delay">Delay (seconds): </label> 
+        <input type="number" id="delay" name="delay" min="1" value="5"> 
+        <br> 
+        <label for="loop">Loop: </label> 
+        <input type="checkbox" id="loop" name="loop" checked> 
+        <br> 
+        <label for="navs">Show Navigation: </label> 
+        <input type="checkbox" id="navs" name="navs" checked> 
+        <br> 
+        <label for="pags">Show Pagination: </label> 
+        <input type="checkbox" id="pags" name="pags" checked> 
+        <br> 
+        <label for="auto">Auto Slide: </label> 
+        <input type="checkbox" id="auto" name="auto" checked> 
+        <br> 
+        <label for="stopMouseHover">Stop on Hover: </label> 
+        <input type="checkbox" id="stopMouseHover" name="stopMouseHover" checked> 
+    </form>
+
+    <label for="style-toggle">
+        <input type="checkbox" id="style-toggle"> Изменить стили страницы
+      </label>
+    
+      <div id="style-controls" style="display: none;">
+        <div>
+          <label for="font-size">Размер шрифта:</label>
+          <input type="range" id="font-size" min="10" max="50" value="16">
+        </div>
+    
+        <div>
+          <label for="text-color">Цвет текста:</label>
+          <input type="color" id="text-color" value="#000000">
+        </div>
+    
+        <div>
+          <label for="bg-color">Цвет фона:</label>
+          <input type="color" id="bg-color" value="#ffffff">
+        </div>
+      </div>
+      <script src="{% static 'js/styles_control.js' %}"></script>
+
+
+
+    <!-- Информация о пользователе -->
+<section class="user-info mt-6 px-6 py-12 bg-gray-100 rounded-xl shadow-lg">
+    <h2 class="mb-12 text-2xl text-center text-gray-800 font-semibold">User Information</h2>
+    <div class="user-details">
+        <p class="user-detail"><strong>Username:</strong> {{ user.username }}</p>
+        <p class="user-detail"><strong>Timezone:</strong> {{ user_timezone }}</p>
+        <p class="user-detail"><strong>Current Date:</strong> {{ current_date_formatted }}</p>
+        <pre class="calendar-text">{{ calendar_text }}</pre>
+    </div>
+</section>
+
+<div class="aquarium" style="margin-top: 60px;">
+    <div class="fish-container">
+        <div class="fish">
+            <img src="{% static 'images/fish.svg' %}" alt="Fish 1">
+        </div>
+    </div>
+    <div class="fish-container">
+        <div class="fish">
+            <img src="{% static 'images/fish.svg' %}" alt="Fish 2">
+        </div>
+    </div>
+    <div class="fish-container">
+        <div class="fish">
+            <img src="{% static 'images/fish.svg' %}" alt="Fish 3">
+        </div>
+    </div>
+    <div class="seaweed" style="left: 5%; width: 120px; height: 170px;">        
+        <img src="{% static 'images/algae.svg' %}" alt="Algae 1" style="width: 100%; height: auto;">
+    </div>
+    <div class="seaweed" style="left: 35%; width: 120px; height: 170px;">
+        <img src="{% static 'images/algae.svg' %}" alt="Algae 2" style="width: 100%; height: auto;">
+    </div>
+    <div class="seaweed" style="left: 65%; width: 120px; height: 170px;">
+        <img src="{% static 'images/algae.svg' %}" alt="Algae 3" style="width: 100%; height: auto;">
+    </div>
+    <div class="bubble bubble-1">Ф</div>
+    <div class="bubble bubble-2">Ы</div>
+    <div class="bubble bubble-3">Р</div>
+    <div class="bubble bubble-4">c</div>
+    <div class="bubble bubble-5">l</div>
+    <div class="bubble bubble-6">i</div>
+    <div class="bubble bubble-7">c</div>
+    <div class="bubble bubble-8">k</div>
+</div>
+
+
+
+    
+<section class="mt-6 px-6 py-12 bg-gray-100 rounded-xl catalog">
+    <a id="n1"></a>
+    <h2 class="mb-12 text-2xl text-center">Catalog</h2>
+
+    <!-- Форма для поиска -->
+    <form method="GET" action="{% url 'busyness:search_products' %}" class="search-form mb-4">
+        <label for="search-query">Search for products:</label>
+        <input type="text" id="search-query" name="query" placeholder="Search for products..." maxlength="30">
+        <button type="submit">Search</button>
+    </form>
+
+    
+        <!-- Форма для сортировки -->
+    <form method="GET" action="{% url 'core:index' %}" class="sort-form mb-4"> 
+        <label for="sort_by">Sort by:</label>
+        <select name="sort_by" id="sort_by" onchange="this.form.submit()">
+            <option value="">Select</option>
+            <option value="name" {% if request.GET.sort_by == 'name' %}selected{% endif %}>Name</option>
+            <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>Price</option>
+            <option value="category_id" {% if request.GET.sort_by == 'category_id' %}selected{% endif %}>Category</option>
+        </select>
+    </form>
+
+
+    
+    <div class="product-grid">
+        {% for product in products %}
+            <article itemscope itemtype="http://schema.org/Product" class="product-item">
+                <a href="{% url 'busyness:product_detail' product.id %}" itemprop="url">
+                    <img src="{{ product.image.url }}" width="400" height="140" alt="{{ product.name }}" itemprop="image">
+                </a>
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h3 class="text-2xl" itemprop="name">{{ product.name }}</h3>
+                    <p class="text-gray-500">Price: <span itemprop="offers" itemscope itemtype="http://schema.org/Offer"><span itemprop="price">{{ product.price }}</span> <meta itemprop="priceCurrency" content="BYN"></span>BYN</p>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    
+    <div id="pagination" class="catalog-pagination">
+        <button class="page-arrow page-arrow-left" id="prevPage"></button>
+        <div id="pageNumbers" class="page-buttons-container"></div>
+        <button class="page-arrow page-arrow-right" id="nextPage"></button>
+    </div>    
+    
+    <script src="{% static 'js/pagination.js' %}"></script>
+    
+
+
+        <!-- Блок последней новости -->
+    <section class="latest-news mb-6 news-section">
+        <h2 class="text-2xl text-center mb-4">Latest News</h2>
+        <div class="news-grid">
+            {% if latest_news %}
+                <article class="news-item latest-news-item">
+                    <div class="news-image-container">
+                        <img src="{{ latest_news.image.url }}" alt="{{ latest_news.title }}" class="news-image">
+                        <div class="news-details">
+                            <h3 class="news-title">{{ latest_news.title }}</h3>
+                            <p class="news-content">{{ latest_news.first_part }}</p>
+                            <a href="{% url 'busyness:new_detail' latest_news.id %}" class="read-more">Read more</a>
+                        </div>
+                    </div>
+                </article>
+            {% else %}
+                <p class="text-center">No news available at the moment.</p>
+            {% endif %}
+        </div>
+    </section>
+
+
+    <a href="#n1">Вернуться в начало</a>
+</section>
+    
+   
+{% endblock %}

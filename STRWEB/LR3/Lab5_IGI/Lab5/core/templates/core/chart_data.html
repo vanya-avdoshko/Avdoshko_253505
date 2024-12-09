@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<canvas id="functionChart" width="800" height="400"></canvas>
+<button id="saveChart" style="margin-top: 10px;">Сохранить график</button>
+
+<script>
+    // Загружаем данные из JSON
+fetch("{% static 'chart_data.json' %}")
+    .then(response => response.json()) // Преобразуем ответ в формат JSON
+    .then(data => {
+        // Извлекаем значения для оси X, разложения и точных значений
+        const xValues = data.x;
+        const seriesValues = data.series;
+        const exactValues = data.exact;
+
+        // Настройка данных для графика
+        const chartData = {
+            labels: xValues, // Значения x
+            datasets: [
+                {
+                    label: "Разложение в ряд", // Название для первого графика
+                    data: seriesValues, // Данные для разложения в ряд
+                    borderColor: "blue", // Цвет линии
+                    borderWidth: 2, // Ширина линии
+                    fill: false, // Не заполняем область под графиком
+                    tension: 0.3 // Сглаживание линии
+                },
+                {
+                    label: "Точное значение", // Название для второго графика
+                    data: exactValues, // Данные для точных значений
+                    borderColor: "red", // Цвет линии
+                    borderWidth: 2, // Ширина линии
+                    fill: false, // Не заполняем область под графиком
+                    tension: 0.3 // Сглаживание линии
+                }
+            ]
+        };
+
+        // Конфигурация графика
+        const config = {
+            type: 'line', // Линейный график
+            data: chartData, // Данные для графика
+            options: {
+                responsive: true, // Отзывчивость графика
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'x' // Подпись оси X
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'F(x)' // Подпись оси Y
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true, // Показываем легенду
+                        position: 'top' // Располагаем легенду вверху
+                    }
+                }
+            }
+        };
+
+        // Создаём график
+        const ctx = document.getElementById('functionChart').getContext('2d');
+        const myChart = new Chart(ctx, config);
+
+        // Логика для сохранения графика
+        const saveButton = document.getElementById('saveChart');
+        saveButton.addEventListener('click', function () {
+            // Создаём ссылку для скачивания изображения
+            const link = document.createElement('a');
+            link.href = document.getElementById('functionChart').toDataURL('image/png');
+            link.download = 'function_chart.png'; // Имя файла
+            link.click(); // Симулируем клик по ссылке для скачивания
+        });
+    })
+    .catch(error => console.error("Ошибка загрузки данных:", error)); // Обработка ошибок загрузки
+
+</script>
+{% endblock %}

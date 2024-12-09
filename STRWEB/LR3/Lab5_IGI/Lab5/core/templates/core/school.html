@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <title>Форма Ученика</title>
+
+    <h1>Заполнение данных об ученике</h1>
+    <h2>Конструкция class/extends </h2>
+
+    <!-- Форма для добавления ученика -->
+    <form id="student-form">
+        <label for="first-name">Имя:</label>
+        <input type="text" id="first-name" required>
+        
+        <label for="last-name">Фамилия:</label>
+        <input type="text" id="last-name" required>
+        
+        <label for="class-name">Класс:</label>
+        <input type="text" id="class-name" required>
+
+        <button type="submit">Добавить ученика</button>
+    </form>
+
+    <h2>Все ученики:</h2>
+    <ul id="student-list"></ul>
+
+    <h2>Однофамильцы:</h2>
+    <ul id="same-surnames"></ul>
+
+    <script src="{% static 'js/class.js' %}"></script>
+{% endblock %}

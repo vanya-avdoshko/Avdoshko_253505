@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Random Dog Image{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Random Dog Image</h1>
+    <div class="dog-image">
+        <img src="{{ image }}" alt="Random Dog">
+    </div>
+{% endblock %}

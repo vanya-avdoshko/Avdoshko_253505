@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{%load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="600"> 
+    <!-- <script src="https://cdn.tailwindcss.com"></script> --> 
+    <title>Base</title>
+    <link rel="icon" href="{% static 'images/icon.png' %}" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap">
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/preload.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            width: 90%;
+            height: 90%;
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+    
+</head>
+
+<body>
+    {% comment %} {% if request.user.is_authenticated %}
+        <div id="user-is-authenticated" style="display: none;"></div>
+    {% endif %} {% endcomment %}
+    <div class="background-new" data-src="{% static 'images/parrot.png' %}"></div>
+
+
+    <header class="headerstyle">
+    <!-- Логотип с ссылкой на домашнюю страницу -->
+    <a href="/" class="header-link">
+        <img src="{% static 'images/icon.png' %}" alt="Logo" class="header-logo" width="60" height="60"> 
+        <span class="header-title">ФЫРclick</span> 
+    </a>  
+     
+
+    <nav class="space-x-6">
+        <!-- Суперадминские ссылки -->
+        {% if user.is_authenticated and user.is_superuser %}
+            <a href="/busyness/news_list" class="text-lg font-semibold hover:text-gray-500">News</a>
+            <a href="/busyness/supplier_list/" class="text-lg font-semibold hover:text-gray-500">Supplier List</a>  
+            <a href="/busyness/order_list/" class="text-lg font-semibold hover:text-gray-500">Order List</a> 
+            <a href="/busyness/statistics" class="text-lg font-semibold hover:text-gray-500">Statistics</a> 
+            <a href="/add_employee/" class="text-lg text-teal-500 hover:text-teal-700">Add Employee</a> 
+            <a href="/tags/" class="text-lg text-teal-500 hover:text-teal-700">Tags</a> 
+            <a href="/school/" class="text-lg text-teal-500 hover:text-teal-700">School</a> 
+            <a href="/school2/" class="text-lg text-teal-500 hover:text-teal-700">School_2</a> 
+            <a href="/busyness/add_promo_code/" class="text-lg text-teal-500 hover:text-teal-700">Add Promocode</a> 
+            <a href="{% url 'busyness:create_order' %}" class="text-lg text-teal-500 hover:text-teal-700">Create Order</a>
+            <a href="/busyness/add_news/" class="text-lg text-teal-500 hover:text-teal-700">Add News</a>    
+        {% endif %}
+        
+        <!-- Ссылки для сотрудника -->
+        {% if user.is_authenticated and user.is_employee %}
+            <a href="/busyness/suppliers" class="text-lg font-semibold hover:text-gray-500">View My Suppliers</a>
+        {% endif %}
+
+        <!-- Ссылки для клиента -->
+        {% if user.is_authenticated and user.is_customer %}
+        <a href="#n1" class="text-lg font-semibold hover:text-gray-500">Catalog</a>
+            <a href="/busyness/news_list" class="text-lg font-semibold hover:text-gray-500">News</a>
+            <a href="/busyness/cart" class="text-lg font-semibold hover:text-gray-500">Cart</a>
+        {% endif %}
+
+        <!-- Ссылки для аутентифицированных пользователей -->
+        {% if user.is_authenticated %}
+            <a href="{% url 'core:logout' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Log out</a>
+        {% else %}
+            <a href="{% url 'core:login' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Log in</a>
+            <a href="{% url 'core:signup' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Sign up</a>
+        {% endif %}
+    </nav>
+</header>
+
+
+   <main class="px-6 py-6">
+    {% block content %}
+
+    {% endblock %}
+
+   </main>
+
+
+
+<footer>
+    <!-- Секция About -->
+    <section class="footer-about">
+        <h2>About</h2>
+        <p>Made by student of <abbr title="Belarusian State University of Informatics and Radioelectronics">BSUIR</abbr> Avdoshko Ivan</p>
+    </section>
+
+    <nav class="footer-company" aria-label="Company navigation">
+        <h2>Company</h2>
+        <ul>
+            <li><a href="/busyness/promo_code_list/">Promocodes</a></li>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+            <li><a href="/vacancy/">Vacancy</a></li>
+        </ul>
+    </nav>
+
+    <nav class="footer-users" aria-label="Users navigation">
+        <h2>Users</h2>
+        <ul>
+            <li><a href="/fact/">Facts about Cats</a></li>
+            <li><a href="/dogs/">Cute Dogs</a></li>
+            <li><a href="/glossary/">Glossary</a></li>
+            <li><a href="/weather/">Weather</a></li>
+            <li><a href="/chart_data/">Graph</a></li>
+            <li><a href="/busyness/faq_list">FAQ List</a></li>
+        </ul>
+    </nav>
+
+    <nav class="footer-contact" aria-label="Contact navigation">
+        <h2>Contact</h2>
+        <ul>
+            <li><a href="/about/">About Us</a></li>
+            <li><a href="/contact/">Our Team</a></li>
+            <li><a href="/employees/">Employees Table</a></li>
+        </ul>
+    </nav>
+</footer>
+
+
+<script defer type="module">
+    import BackgroundAnimation from "{% static 'js/new_animation.js' %}";
+
+    const backgroundNew = document.querySelector('.background-new');
+    if (backgroundNew) {
+        new BackgroundAnimation(backgroundNew);
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} About Us {% endblock %}
+
+{% block content %}
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <!-- Логотип компании -->
+    <div class="text-center mb-6 company-logo-container">
+        {% if company.logo %}
+            <img src="{{ company.logo.url }}" title="Our Logo" alt="Company Logo" class="company-logo" width="150" height="150">
+        {% else %}
+            <img src="{% static 'images/no.jpeg' %}" alt="Default Logo" class="company-logo" width="150" height="150">
+        {% endif %}
+    </div>
+
+   <!-- О компании -->
+   <div class="quote-container">
+        <blockquote lang="ru">
+            ФЫРclick — это не просто магазин, это место, где забота о животных начинается с каждого клика. Мы верим, что каждый питомец заслуживает лучшего, и стремимся сделать их жизнь комфортнее с помощью качественных товаров.
+        </blockquote>
+
+        <blockquote lang="en">
+            ФЫРclick is not just a store, it's a place where care for animals begins with every click. We believe that every pet deserves the best, and we strive to make their lives more comfortable with high-quality products.
+        </blockquote>
+    </div>
+
+
+
+    
+    <hr class="section-divider"> <!-- Разделитель -->
+
+    <!-- История по годам -->
+    {% if company.history_by_years %}
+        <h3 class="section-title" hidden>History by Years</h3>
+        <p class="text-fragment text-lg text-gray-500" hidden>{{ company.history_by_years }}</p>
+        {% comment %} <hr class="section-divider">  {% endcomment %}
+    {% endif %}
+
+    <!-- Реквизиты -->
+    {% if company.requisites %}
+        <h3 class="section-title" hidden>Requisites</h3>
+        <p class="text-fragment text-lg text-gray-500"hidden>{{ company.requisites }}</p>
+        {% comment %} <hr class="section-divider">  {% endcomment %}
+    {% endif %}
+
+    <!-- Контейнер для информации о компании -->
+    <div class="company-info-container">
+
+        <!-- История по годам -->
+        <h3 class="section-title">History by Years</h3>
+        <ul class="history-list">
+            <li class="history-item first"><strong>2022:</strong> Основание компании ФЫРclick и запуск первого интернет-магазина зоотоваров.</li>
+            <li class="history-item middle"><strong>2023:</strong> Расширение ассортимента товаров, добавление новых категорий.</li>
+            <li class="history-item middle"><strong>2024:</strong> Открытие первого физического магазина в Минске.</li>
+            <li class="history-item last"><strong>2025:</strong> Запуск мобильного приложения для удобства покупок.</li>
+        </ul>
+        <hr class="section-divider"> <!-- Разделитель -->
+
+        <!-- Реквизиты -->
+        <h3 class="section-title">Requisites</h3>
+        <table class="requisites-table">
+            <tbody>
+                <tr class="first">
+                    <td class="requisite-name">Название компании:</td>
+                    <td class="requisite-value">ФЫРclick</td>
+                </tr>
+                <tr class="middle">
+                    <td class="requisite-name">Адрес:</td>
+                    <td class="requisite-value">г. Минск, ул. Л. Беды, 4</td>
+                </tr>
+                <tr class="middle">
+                    <td class="requisite-name">КПП:</td>
+                    <td class="requisite-value">987654321</td>
+                </tr>
+                <tr class="middle">
+                    <td class="requisite-name">ОГРН:</td>
+                    <td class="requisite-value">1021234567890</td>
+                </tr>
+                <tr class="middle">
+                    <td class="requisite-name">ИНН:</td>
+                    <td class="requisite-value">123456789</td>
+                </tr>
+                <tr class="last">
+                    <td class="requisite-name">Электронная почта:</td>
+                    <td class="requisite-value"> info@fyrclick.by</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr class="section-divider"> <!-- Разделитель -->
+    </div>
+
+
+
+    <!-- Видео компании -->
+    {% if company.video %}
+        <h3 class="section-title">Company Video</h3>
+        <div class="video-container">
+            <video width="400" controls class="video">
+                <source src="{{ company.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <hr class="section-divider"> <!-- Разделитель -->
+    {% endif %}
+
+    <!-- Сертификат компании 
+    {% if company.certificate %}
+        <h3 class="section-title" hidden>Certificate</h3>
+        <a href="{{ company.certificate.url }}" class="text-blue-500 certificate-link" target="_blank">Download Certificate</a>
+        <hr class="section-divider"> 
+    {% endif %} -->
+    <h3 class="section-title">Certificate</h3>
+    <div class="certificate-container">
+        <div class="certificate-border"></div>
+        <div class="certificate-content">
+            <h1>Сертификат соответствия</h1>
+            <p>Выдан обществу с ограниченной ответственностью</p>
+            <h2>ФЫРclick</h2>
+            <p>настоящим подтверждает соответствие стандартам качества</p>
+            <h3>Всемирной организации здравоохранения</h3>
+            <p>выдан <strong>28 марта, 2023</strong></p>
+    
+            <!-- Подпись -->
+            <div class="signature">
+                <p>Выдан:</p>
+                <img src="{% static 'images/signature.png' %}" alt="Подпись" class="signature-image"> <!-- Изображение росписи -->
+                <p>Евдокец А.Ч.</p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button id="pause">Pause</button> 
+        <button id="play">Play</button>
+        <button id="cancel">Cancel</button>
+        <button id="faster">Faster</button>
+        <button id="slower">Slower</button>
+        </div>
+        <div class="animation-container">
+            <img id="hamster" src="{% static 'images/hamster.png' %}">
+        </div>
+        <script>
+            // Анимируемый элемент
+    const hamster = document.getElementById("hamster");
+
+    // Фреймы анимации
+    const frames = [
+        { transform: "translateX(300%) rotate(0deg) scaleX(1)", offset: 0 },  // Начало справа
+        { transform: "translateX(0%) rotate(-1080deg) scaleX(1)", offset: 0.5 }, // Движение налево, вращение против часовой
+        { transform: "translateX(0%) rotate(0deg) scaleX(-1)", offset: 0.5 },  // Зеркализация
+        { transform: "translateX(300%) rotate(1080deg) scaleX(-1)", offset: 1 }, // Движение направо, вращение по часовой
+    ];
+
+    // Параметры анимации
+    const config = {
+        duration: 6000, // Длительность анимации
+        easing: "linear", // Линейная скорость
+        iterations: Infinity, // Бесконечная анимация
+    };
+
+    // Создание анимации
+    const animation = hamster.animate(frames, config);
+
+    // Управление анимацией
+    document.getElementById("pause").addEventListener("click", () => animation.pause());
+    document.getElementById("play").addEventListener("click", () => animation.play());
+    document.getElementById("cancel").addEventListener("click", () => animation.cancel());
+    document.getElementById("faster").addEventListener("click", () => (animation.playbackRate *= 2));
+    document.getElementById("slower").addEventListener("click", () => (animation.playbackRate /= 2));
+        </script>
+    
+    
+
+    <section class="text-fragment">
+        <h3 class="section-title">Partners</h3>
+        <div class="partners-container">
+            {% for partner in partners %}
+                <a href="{{ partner.website }}" target="_blank" class="partner-logo">
+                    <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="header-logo">
+                </a>
+            {% empty %}
+                <p>No partners yet.</p>
+            {% endfor %}
+        </div>
+        <hr class="section-divider"> <!-- Разделитель -->
+    </section>
+
+    <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A46a6a066c28f669905b98c23b1bacd0a1c6d5d407a3b087bc576b8a836a2b5ab&amp;source=constructor" width="100%" height="400" frameborder="0" class="map-frame"></iframe>
+</div>
+
+{% endblock %}

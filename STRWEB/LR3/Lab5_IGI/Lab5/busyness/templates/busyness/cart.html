@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    <h3 class="fyrclick-title">Проверка возраста</h3>
+
+    <form id="birthdate-form" class="fyrclick-form">
+        <label for="birthdate" class="fyrclick-label">Введите вашу дату рождения:</label>
+        <input type="date" id="birthdate" name="birthdate" class="fyrclick-input" required>
+        <button type="submit" class="fyrclick-button">Проверить</button>
+    </form>
+
+    <div id="birthdate-result" class="fyrclick-result"></div>
+
+    <script src="{% static 'js/birthdate.js' %}"></script>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart_item in cart_items %}
+                <tr>
+                    <td>{{ cart_item.product.name }}</td>
+                    <td>{{ cart_item.product.price }} BYN</td>
+                    <td>{{ cart_item.quantity }}</td>
+                    <td>{{ cart_item.total_price }} BYN</td>
+                    <td>
+                        <form method="POST" action="{% url 'busyness:remove_from_cart' cart_item.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3">Total Price:</td>
+                <td>{{ total_price|floatformat:2 }} BYN</td>
+            </tr>
+            {% if discounted_price %}
+            <tr>
+                <td colspan="3">Discounted Price:</td>
+                <td>{{ discounted_price|floatformat:2 }} BYN</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <!-- Promo Code Section -->
+    <div class="promo-section">
+        <form method="POST" action="{% url 'busyness:apply_promo_code' %}">
+            {% csrf_token %}
+            <label for="promo_code">Enter Promo Code:</label>
+            <input type="text" id="promo_code" name="promo_code" required>
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+
+    <!-- Confirm Order Section -->
+    <div class="confirm-section">
+        <form method="POST" action="{% url 'busyness:confirm_order' %}">
+            {% csrf_token %}
+            <button type="submit" accesskey="c">Confirm Order and Checkout</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Order List{% endblock %}
+
+{% block content %}
+  <div class="order-list-container">
+    <h1 class="order-list-title">Order List</h1>
+    <ul class="order-list">
+      {% for order in orders %}
+        <li class="order-item">
+          <strong class="order-id">Order ID:</strong> {{ order.id }}<br>
+          <strong>Supplier:</strong> {{ order.supplier.name }}<br>
+          <strong class="order-date">Date:</strong> {{ order.date|date:"d M Y H:i" }}<br>
+          <strong class="total-price">Total Price:</strong> ${{ order.total_price }}<br>
+          <strong>Products:</strong>
+          <ul class="product-list">
+            {% for item in order.orderproduct_set.all %}
+              <li class="product-item-2">{{ item.quantity }} x {{ item.product.name }}</li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>    
+  </div>
+{% endblock %}

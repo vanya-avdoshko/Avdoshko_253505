@@ -1,0 +1,183 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %} Employees {% endblock %}
+
+
+{% block content %}
+<h2>Сотрудники</h2>
+
+<!-- Кнопка для открытия формы -->
+<button id="addEmployeeButton">Добавить сотрудника</button>
+
+<!-- Форма добавления сотрудника -->
+<div id="addEmployeeForm" class="auth-form" style="display:none;">
+    <h1>Добавить сотрудника</h1>
+
+    <form id="employeeForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_user">Username</label>
+            {{ form.user }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_name">Name</label>
+            {{ form.name }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_position">Position</label>
+            {{ form.position }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">Email</label>
+            {{ form.email }}
+            <span class="tooltip-form" id="emailTooltip">Введите корректный email, например: example@example.com</span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone">Номер телефона</label>
+            {{ form.phone }}
+            <span class="tooltip-form" id="phoneTooltip">Пример: 80291112233, +375 (29) 111-22-33, 8 (029) 1112233</span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_photo">Photo</label>
+            {{ form.photo }}
+        </div>
+
+        {% if form.errors or form.non_field_errors %}
+        <div id="formErrors" class="form-errors">
+            {% for field in form %}
+                {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn-form-disabled" id="btn-form-disabled">Добавить</button>
+    </form>
+</div>
+<div>
+    <input type="text" id="filterInput" placeholder="Введите текст для фильтрации">
+    <button id="filterButton">Найти</button>
+</div>
+
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Выбрать</th>
+            <th>Фото</th>
+            <th class="sortable" data-sort="name">ФИО <span class="sort-arrow"></span></th>
+            <th class="sortable" data-sort="position">Должность <span class="sort-arrow"></span></th>
+            <th class="sortable" data-sort="phone">Телефон <span class="sort-arrow"></span></th>
+        </tr>
+    </thead>
+    <tbody id="employeeTableBody">
+        {% for employee in employees %}
+        <tr class="employee-item" id="employee-{{ employee.id }}" 
+            data-name="{{ employee.name }}" 
+            data-position="{{ employee.position }}" 
+            data-phone="{{ employee.phone }}" 
+            data-photo="{{ employee.photo.url }}">
+            <td><input type="checkbox" name="selected_employees" value="{{ employee.id }}"></td>
+            <td><img src="{{ employee.photo.url }}" alt="{{ employee.name }}" width="100"></td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.position }}</td>
+            <td>{{ employee.phone }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<!-- Кнопка для премирования -->
+<button id="rewardButton">Премировать</button>
+
+<!-- Блок для отображения текста премирования -->
+<div id="rewardText" style="margin-top: 20px; padding: 10px; border: 1px solid #ddd; display: none;">
+    <h3>Текст премирования:</h3>
+    <p id="rewardMessage"></p>
+</div>
+
+
+<!-- Пагинация -->
+<div id="pagination" class="catalog-pagination">
+    <button class="page-arrow page-arrow-left" id="prevPage"></button>
+    <div id="pageNumbers" class="page-buttons-container"></div>
+    <button class="page-arrow page-arrow-right" id="nextPage"></button>
+</div>
+
+<!-- Блок для вывода информации о сотруднике -->
+<div class="employeeDetails" id="employeeDetails" style="display:none; margin-top: 20px; padding: 10px; border: 1px solid #ddd;">
+    <h3>Информация о сотруднике:</h3>
+    <p><strong>ФИО:</strong> <span id="detailName"></span></p>
+    <p><strong>Должность:</strong> <span id="detailPosition"></span></p>
+    <p><strong>Телефон:</strong> <span id="detailPhone"></span></p>
+    <p><strong>Фото:</strong> <img id="detailPhoto" width="100" alt="Фото сотрудника"></p>
+</div>
+
+<!-- Прелоадер -->
+<div id="loader" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+    <div class="loader"></div>
+</div>
+
+<!-- Блок для отображения текста премирования -->
+<div id="rewardText" style="margin-top: 20px; padding: 10px; border: 1px solid #ddd; display: none;">
+    <h3>Текст премирования:</h3>
+    <p id="rewardMessage"></p>
+</div>
+
+<script>
+    document.getElementById('addEmployeeButton').addEventListener('click', function() {
+        var form = document.getElementById('addEmployeeForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    });
+    {% comment %} document.getElementById('btn-form-disabled').addEventListener('click', function() {
+        document.getElementById('addEmployeeForm').submit();
+        
+    }) {% endcomment %}
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Находим все строки сотрудников в таблице
+        const employeeRows = document.querySelectorAll('.employee-item');
+        
+        // Элементы для вывода информации
+        const detailsBlock = document.getElementById('employeeDetails');
+        const detailName = document.getElementById('detailName');
+        const detailPosition = document.getElementById('detailPosition');
+        const detailPhone = document.getElementById('detailPhone');
+        const detailPhoto = document.getElementById('detailPhoto');
+        
+        // Добавляем обработчик события на каждую строку таблицы
+        employeeRows.forEach(function(row) {
+            row.addEventListener('click', function() {
+                // Извлекаем данные из атрибутов data-* строки
+                const name = row.getAttribute('data-name');
+                const position = row.getAttribute('data-position');
+                const phone = row.getAttribute('data-phone');
+                const photo = row.getAttribute('data-photo');
+                
+                // Заполняем блок с деталями
+                detailName.textContent = name;
+                detailPosition.textContent = position;
+                detailPhone.textContent = phone;
+                detailPhoto.src = photo;
+
+                // Показываем блок с деталями
+                detailsBlock.style.display = 'block';
+            });
+        });
+    });
+</script>
+
+{% comment %} <script src="{% static 'js/table_pagination.js' %}"></script> {% endcomment %}
+<script src="{% static 'js/search.js' %}"></script>
+<script src="{% static 'js/reward.js' %}"></script>
+<script src="{% static 'js/info_about_employee.js' %}"></script>
+<script src="{% static 'js/input_check.js' %}"></script>
+<script src="{% static 'js/sort.js' %}"></script>
+
+{% endblock %}
